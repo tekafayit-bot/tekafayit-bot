@@ -11,9 +11,9 @@ from flask import Flask
 import threading, time, pandas as pd
 
 # === CONFIG ===
-TOKEN = "YOUR_TELEGRAM_BOT_TOKEN"
+TOKEN = "7378411294:AAG02Noxl3PCpA9F7-7eLFlmJVEtejd87vo"
 CHANNEL = "@TekafayitEthiopia"
-ADMIN_ID = 123456789        # replace with your numeric Telegram ID
+ADMIN_ID = 6979709628        # replace with your numeric Telegram ID
 DB_FILE = "tekafayit.json"
 
 # === DATABASE ===
