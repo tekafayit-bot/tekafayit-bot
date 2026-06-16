@@ -46,7 +46,7 @@ def report_html(date_iso: str) -> str:
     dfmt     = d.strftime("%-d/%-m/%Y")
 
     lines = [
-        "📊 <b>STATION 2 — Harar Post Office</b>",
+        "📊 <b>STATION 2 — Harar Post Office and Stion 16 (Kersa)</b>",
         f"📅 <b>Date: {dfmt}</b>",
         "",
         "<pre>",
