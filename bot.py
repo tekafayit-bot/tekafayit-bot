@@ -290,8 +290,21 @@ async def on_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
             await q.edit_message_text("❌ You are not registered yet.\nAsk @gech_2721 to assign you a KIT.")
             return
         if adm and not officer:
-            await q.edit_message_text("ℹ️ Admin: select officer kit to enter data for.",
-                reply_markup=kb_main(True, False))
+            # Show all officers so admin can pick whose kit to enter data for
+            officers = db.get_all_officers()
+            kb = [
+                [InlineKeyboardButton(
+                    f"{o['name']} — {', '.join(o['kits'])}",
+                    callback_data=f"admin_enter_{i}"
+                )]
+                for i, o in enumerate(officers)
+            ]
+            kb.append([InlineKeyboardButton("🔙 Back", callback_data="back_main")])
+            await q.edit_message_text(
+                "👮 <b>Enter data as admin</b>\nSelect an officer:",
+                parse_mode="HTML",
+                reply_markup=InlineKeyboardMarkup(kb)
+            )
             return
         if len(officer["kits"]) > 1:
             kb = [[InlineKeyboardButton(k, callback_data=f"kit_{k}")] for k in officer["kits"]]
@@ -304,6 +317,39 @@ async def on_callback(update: Update, ctx: ContextTypes.DEFAULT_TYPE):
                 parse_mode="HTML"
             )
             return S_REG
+
+    elif data.startswith("admin_enter_"):
+        if not adm: return
+        idx = int(data[12:])
+        officers = db.get_all_officers()
+        o = officers[idx]
+        ctx.user_data["officer_name"] = o["name"]
+        if len(o["kits"]) > 1:
+            kb = [[InlineKeyboardButton(k, callback_data=f"admin_kit_{k}")] for k in o["kits"]]
+            kb.append([InlineKeyboardButton("🔙 Back", callback_data="enter_data")])
+            await q.edit_message_text(
+                f"👮 <b>{o['name']}</b> — select KIT:",
+                parse_mode="HTML",
+                reply_markup=InlineKeyboardMarkup(kb)
+            )
+        else:
+            ctx.user_data["kit"] = o["kits"][0]
+            await q.edit_message_text(
+                f"📝 <b>{o['name']}</b> — KIT <code>{o['kits'][0]}</code>\n\nEnter <b>REG</b> count:",
+                parse_mode="HTML"
+            )
+            return S_REG
+
+    elif data.startswith("admin_kit_"):
+        if not adm: return
+        kit = data[10:]
+        ctx.user_data["kit"] = kit
+        name = ctx.user_data.get("officer_name", "?")
+        await q.edit_message_text(
+            f"📝 <b>{name}</b> — KIT <code>{kit}</code>\n\nEnter <b>REG</b> count:",
+            parse_mode="HTML"
+        )
+        return S_REG
 
     elif data.startswith("kit_"):
         kit = data[4:]
