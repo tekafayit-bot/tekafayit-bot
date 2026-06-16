@@ -1,0 +1,15 @@
+app = "harar-nid-bot"
+primary_region = "ams"
+
+[build]
+
+[processes]
+  app = "python bot.py"
+
+[env]
+  PYTHONUNBUFFERED = "1"
+  SQLITE_PATH = "/app/data/harar_nid_bot.db"
+
+[mounts]
+  source = "harar_nid_bot_data"
+  destination = "/app/data"
