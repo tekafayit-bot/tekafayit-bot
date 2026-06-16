@@ -71,7 +71,7 @@ def report_plain(date_iso: str) -> str:
     dfmt     = d.strftime("%-d/%-m/%Y")
 
     lines = [
-        f"📊  STATION 2 (Harar Post office)",
+        f"📊  STATION 2 (Harar Post office) and Station 16 (Kersa)",
         f"                              Date {dfmt}",
         f"{'No':<4}{'Name':<11}{'KIT':<10}{'Reg':<6}Uploaded",
         "─" * 44,
